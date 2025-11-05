@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+
+  backend:
+    networks:
+      - app-network
+    env_file:
+      - ../env_files/.env.prod
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  app-network:
+    driver: overlay

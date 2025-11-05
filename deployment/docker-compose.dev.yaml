@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../services/backend
+      dockerfile: Dockerfile
+    env_file:
+      - ../env_files/.env.dev
+    volumes:
+      - ../services/backend/src:/app/src
+      - ../services/backend/uploads:/app/uploads
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    platform: linux/x86_64
+    env_file:
+      - ../env_files/.env.dev
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]         
+      timeout: 10s
+      retries: 5
+    volumes:
+      # - dbdata:/var/lib/mysql
+      - ../services/database/data:/var/lib/mysql
+      - ../services/database/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - ${DB_PORT}:3306
+volumes:
+  dbdata:
+    driver: local

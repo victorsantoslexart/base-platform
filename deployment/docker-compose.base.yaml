@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  backend:
+    image: backend:${VERSION}
+    restart: 'always'
+  database:
+    image: mysql:8.0.21
+    restart: 'always'
+networks:
+  app-network: {}

@@ -1,0 +1,10 @@
+node_modules
+env_files/.env.dev
+env_files/.env.local
+env_files/.env.prod
+services/backoffice/Dockerfile.local
+services/client_punchout/Dockerfile.local
+services/backoffice/Dockerfile.dev
+services/client_punchout/Dockerfile.dev
+services/backend/uploads
+services/database/data
